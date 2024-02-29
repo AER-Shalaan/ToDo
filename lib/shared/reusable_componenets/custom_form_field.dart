@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-
+typedef FieldValidation = String? Function(String?)?;
 class CustomFormField extends StatelessWidget {
   String label;
   TextInputType? keyboard;
   bool obscure;
   Widget? suffixIcon;
-  CustomFormField({super.key,required this.label,this.keyboard,this.obscure = false,this.suffixIcon});
+  FieldValidation validator;
+  TextEditingController? controller;
+  CustomFormField({super.key,required this.label,this.keyboard,this.obscure = false,this.suffixIcon , this.validator,required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      decoration: InputDecoration(
-        label: Text(label),
-        suffixIcon: suffixIcon
-      ),
-      keyboardType: keyboard,
-      style: const TextStyle(color: Colors.black,
-        fontSize: 16),
+      validator: validator,
+      controller: controller,
       obscureText: obscure,
-
+      keyboardType: keyboard,
+      decoration: InputDecoration(label: Text(label), suffixIcon: suffixIcon),
+      style: const TextStyle(color: Colors.black, fontSize: 16),
     );
   }
 }
