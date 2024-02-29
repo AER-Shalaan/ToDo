@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:to_do/style/app_colors.dart';
 import '../login/login_screen.dart';
 
 class Splash extends StatefulWidget {
@@ -33,24 +34,24 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration:  BoxDecoration(
-          color:Theme.of(context).colorScheme.secondary
+        decoration:  const BoxDecoration(
+          color:AppColors.backgroundLightColor
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(flex: 5),
-            Image(image: AssetImage("assets/images/splash_icon/logo.png")),
-            Spacer(flex: 3),
+            const Spacer(flex: 5),
+            const Image(image: AssetImage("assets/images/splash_icon/logo.png")),
+            const Spacer(flex: 3),
             Stack(
               alignment: AlignmentDirectional.bottomCenter,
               children: [
                 Text("supervised by Ali Samir", style: TextStyle(color: Theme.of(context).colorScheme.primary.withOpacity(0.60),fontSize: 14)),
-                Image(image: AssetImage("assets/images/splash_icon/route blue.png"))
+                const Image(image: AssetImage("assets/images/splash_icon/route blue.png"))
 
               ],
             ),
-            SizedBox(height: 15,)
+            const SizedBox(height: 15,)
           ],
         ),
       ),

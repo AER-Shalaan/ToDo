@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/layout/home/home_screen.dart';
-import 'package:to_do/layout/register/register_screen.dart';
 import 'package:to_do/shared/constants.dart';
 
 import '../../shared/reusable_componenets/custom_form_field.dart';
+import '../home/home_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const String routeName = "/Login";
-  LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  static const String routeName = "/Register";
+  RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   bool isObscure = true ;
+  bool isConfirmObscure = true ;
+  TextEditingController fullNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
+  TextEditingController confirmPassController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
           image:DecorationImage(
               fit: BoxFit.fill,
               image: AssetImage("assets/images/bg.jpg"))),
@@ -31,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
         //resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text("Login",textAlign: TextAlign.center),
+          title: Text("Create Account",textAlign: TextAlign.center),
         ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -41,7 +43,17 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Spacer(flex: 1),
+                CustomFormField(
+                  label: "Full Name",
+                  keyboard: TextInputType.name,
+                  controller: fullNameController,
+                  validator: (value) {
+                    if(value==null || value.isEmpty){
+                      return "this field can't be empty";
+                    }
+                    return null;
+                  }
+                ),
                 CustomFormField(
                   label: "Email",
                   keyboard: TextInputType.emailAddress,
@@ -54,9 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       return"Email is not valid";
                     }
                     return null;
-                    },
+                  },
                 ),
-                const SizedBox(height: 15),
                 CustomFormField(
                   label:"Password",
                   keyboard: TextInputType.visiblePassword,
@@ -77,29 +88,45 @@ class _LoginScreenState extends State<LoginScreen> {
                     if(value==null || value.isEmpty){
                       return "this field can't be empty";
                     }
+                    if(value.length<8){
+                      return"Use 8 characters or more for your password";
+                    }
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                CustomFormField(
+                  label:"confirm password",
+                  keyboard: TextInputType.visiblePassword,
+                  obscure: isConfirmObscure ,
+                  controller: confirmPassController,
+                  suffixIcon: IconButton(
+                      onPressed: (){
+                        setState(() {
+                          isConfirmObscure = !isConfirmObscure;
+                        });},
+                      icon: Icon(
+                        isConfirmObscure?Icons.visibility_off:Icons.visibility,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                  ),
+                  validator: (value) {
+                    if(value != passController.text){
+                      return "Those passwords didn't match";
+                    }
+                    if(value==null || value.isEmpty){
+                      return "this field can't be empty";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
                 ElevatedButton(onPressed: (){
                   if(formKey.currentState?.validate()?? false){
-                    Navigator.pushNamedAndRemoveUntil(context, HomeScreen.roteName, (route) => false);
-                  }
+                    Navigator.pushNamedAndRemoveUntil(context, HomeScreen.roteName, (route) => false);                  }
                 },
                     style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary)
-                    ,child: const Text("Login",style: TextStyle(color: Colors.white,fontSize: 18))),
-                const Spacer(flex: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Don't have an account? "),
-                    GestureDetector(
-                        onTap: (){
-                          Navigator.pushNamed(context, RegisterScreen.routeName);
-                        },
-                        child: Text("SignUp",style: TextStyle(color: Theme.of(context).colorScheme.primary),)),
-                  ],
-                )
+                    ,child: Text("Register",style: TextStyle(color: Colors.white,fontSize: 18)))
               ],
             ),
           ),

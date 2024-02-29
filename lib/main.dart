@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:to_do/layout/home/home_screen.dart';
+import 'package:to_do/layout/register/register_screen.dart';
 import 'package:to_do/style/theme/dark.dart';
 import 'package:to_do/style/theme/light.dart';
 import 'layout/login/login_screen.dart';
@@ -20,7 +22,9 @@ class MyApp extends StatelessWidget {
       initialRoute: Splash.routeName,
       routes: {
         Splash.routeName:(_)=>Splash(),
-        LoginScreen.routeName:(_)=>LoginScreen()
+        LoginScreen.routeName:(_)=>LoginScreen(),
+        RegisterScreen.routeName:(_)=>RegisterScreen(),
+        HomeScreen.roteName:(_)=>HomeScreen()
       },
     );
   }
