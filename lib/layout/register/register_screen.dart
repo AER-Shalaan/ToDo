@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/shared/constants.dart';
+import 'package:to_do/shared/firebaseautherrorcodes.dart';
+import 'package:to_do/shared/reusable_componenets/dialog_utils.dart';
 
 import '../../shared/reusable_componenets/custom_form_field.dart';
 import '../home/home_screen.dart';
@@ -24,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image:DecorationImage(
               fit: BoxFit.fill,
               image: AssetImage("assets/images/bg.jpg"))),
@@ -33,7 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         //resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text("Create Account",textAlign: TextAlign.center),
+          title: const Text("Create Account",textAlign: TextAlign.center),
         ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -120,18 +124,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(onPressed: (){
                   if(formKey.currentState?.validate()?? false){
-                    Navigator.pushNamedAndRemoveUntil(context, HomeScreen.roteName, (route) => false);                  }
+                    createNewUser();                 }
                 },
                     style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary)
-                    ,child: Text("Register",style: TextStyle(color: Colors.white,fontSize: 18)))
+                    ,child: const Text("Register",style: TextStyle(color: Colors.white,fontSize: 18)))
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void createNewUser() async{
+    if(formKey.currentState?.validate()??false){
+      DialogUtils.showLoadingDialog(context);
+      try{
+        UserCredential credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passController.text
+        );
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(context: context,
+            message: " Hi ${fullNameController.text}\nyour id: ${credential.user?.uid}",
+          positiveTitleButton: "OK",
+            positiveButtonPress:(){
+              DialogUtils.hideLoading(context);
+            }
+
+    );
+        print(credential.user?.uid);
+      } on FirebaseAuthException catch (e) {
+        DialogUtils.hideLoading(context);
+        if (e.code == FirebaseAuthErrorCodes.weakPassword) {
+          DialogUtils.showMessage(context: context, message: 'The password provided is too weak',
+          positiveTitleButton: "ok",
+            positiveButtonPress: (){
+              DialogUtils.hideLoading(context);
+            }
+          );
+        } else if (e.code == FirebaseAuthErrorCodes.emailAlreadyInUse) {
+          DialogUtils.showMessage(context: context, message: 'The account already exists for that email',
+              positiveTitleButton: "ok",
+              positiveButtonPress: (){
+                DialogUtils.hideLoading(context);
+              }
+          );
+
+        }
+      } catch(e){
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(context: context, message:e.toString(),
+            positiveTitleButton: "ok",
+            positiveButtonPress: (){
+              DialogUtils.hideLoading(context);
+            }
+        );
+      }
+    }
   }
 }
