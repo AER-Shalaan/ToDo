@@ -1,16 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do/layout/register/register_screen.dart';
+import 'package:to_do/shared/Providers/auth_provider.dart';
 import 'package:to_do/shared/constants.dart';
 import 'package:to_do/shared/firebaseautherrorcodes.dart';
+import 'package:to_do/shared/remote/firebase/firestore_helper.dart';
 
 import '../../shared/reusable_componenets/custom_form_field.dart';
 import '../../shared/reusable_componenets/dialog_utils.dart';
+import 'package:to_do/model/user.dart' as MyUser;
 
+import '../home/home_screen.dart';
 class LoginScreen extends StatefulWidget {
   static const String routeName = "/Login";
   LoginScreen({super.key});
-
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -111,6 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
   void login() async{
+    MyAuthProvider provider = Provider.of<MyAuthProvider>(context ,listen: false);
     if(formKey.currentState?.validate()??false){
       DialogUtils.showLoadingDialog(context);
       try {
@@ -118,9 +123,12 @@ class _LoginScreenState extends State<LoginScreen> {
             email: emailController.text,
             password: passController.text
         );
+        MyUser.User? user = await FireStoreHelper.getUser(credential.user!.uid);
+        provider.setUsers(credential.user, user);
         DialogUtils.hideLoading(context);
-        print("user id: ${credential.user?.uid}");
-      } on FirebaseAuthException catch (e) {
+        Navigator.pushNamedAndRemoveUntil(context, HomeScreen.roteName, (route) => false);
+      }
+      on FirebaseAuthException catch (e) {
         DialogUtils.hideLoading(context);
         if (e.code == FirebaseAuthErrorCodes.userNotFound) {
           DialogUtils.showMessage(context: context, message: 'No user found for that email',
@@ -128,7 +136,6 @@ class _LoginScreenState extends State<LoginScreen> {
           positiveButtonPress: (){
             DialogUtils.hideLoading(context);
           });
-
         } else if (e.code == FirebaseAuthErrorCodes.wrongPassword) {
           DialogUtils.showMessage(context: context, message: 'Wrong password',
               positiveTitleButton: "OK",
