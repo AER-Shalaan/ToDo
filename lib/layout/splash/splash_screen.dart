@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do/layout/home/home_screen.dart';
+import 'package:to_do/shared/Providers/auth_provider.dart';
 import 'package:to_do/style/app_colors.dart';
 import '../login/login_screen.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class Splash extends StatefulWidget {
   static const String routeName = "/Splash";
@@ -16,15 +19,13 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
 
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    Future.delayed(const Duration(seconds: 2),(){
-      Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+    Future.delayed(const Duration(seconds: 3),(){
+      checkAutoLogin();
     });
   }
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
     super.dispose();
   }
 
@@ -42,6 +43,8 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
           children: [
             const Spacer(flex: 5),
             const Image(image: AssetImage("assets/images/splash_icon/logo.png")),
+            SizedBox(height: 10),
+            Center(child: LoadingAnimationWidget.prograssiveDots(color: Theme.of(context).colorScheme.primary, size: 80) ),
             const Spacer(flex: 3),
             Stack(
               alignment: AlignmentDirectional.bottomCenter,
@@ -56,5 +59,14 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
         ),
       ),
     );
+  }
+  checkAutoLogin() async {
+    MyAuthProvider provider = Provider.of<MyAuthProvider>(context, listen: false);
+    if(provider.isFirebaseUserLoggedIn()){
+      await provider.retrieveDatabaseUserDara();
+      Navigator.pushReplacementNamed(context, HomeScreen.roteName);
+    }else{
+      Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+    }
   }
 }

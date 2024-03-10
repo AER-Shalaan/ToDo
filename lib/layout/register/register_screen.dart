@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:to_do/layout/login/login_screen.dart';
 import 'package:to_do/shared/constants.dart';
 import 'package:to_do/shared/firebaseautherrorcodes.dart';
+import 'package:to_do/shared/remote/firebase/firestore_helper.dart';
 import 'package:to_do/shared/reusable_componenets/dialog_utils.dart';
 
 import '../../shared/reusable_componenets/custom_form_field.dart';
@@ -147,16 +149,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: emailController.text,
         password: passController.text
         );
+        FireStoreHelper.addUser(fullNameController.text, emailController.text, credential.user!.uid);
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(context: context,
-            message: " Hi ${fullNameController.text}\nyour id: ${credential.user?.uid}",
+            message: " Hi ${fullNameController.text}\nyour id: ${credential.user?.uid}\nGoing to Login....",
           positiveTitleButton: "OK",
             positiveButtonPress:(){
               DialogUtils.hideLoading(context);
+              Navigator.pop(context);
             }
 
     );
-        print(credential.user?.uid);
       } on FirebaseAuthException catch (e) {
         DialogUtils.hideLoading(context);
         if (e.code == FirebaseAuthErrorCodes.weakPassword) {
