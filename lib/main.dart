@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do/layout/home/home_screen.dart';
+import 'package:to_do/layout/home/provider/home_provider.dart';
 import 'package:to_do/layout/register/register_screen.dart';
 import 'package:to_do/shared/Providers/auth_provider.dart';
 import 'package:to_do/style/theme/dark.dart';
@@ -36,7 +37,9 @@ class MyApp extends StatelessWidget {
         Splash.routeName:(_)=>Splash(),
         LoginScreen.routeName:(_)=>LoginScreen(),
         RegisterScreen.routeName:(_)=>RegisterScreen(),
-        HomeScreen.roteName:(_)=>HomeScreen()
+        HomeScreen.roteName:(_)=>ChangeNotifierProvider(
+          create: (_)=>HomeProvider(),
+            child: HomeScreen())
       },
     );
   }

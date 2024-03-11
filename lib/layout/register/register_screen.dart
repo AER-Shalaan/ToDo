@@ -38,8 +38,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Colors.transparent,
         //resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          centerTitle: true,
           backgroundColor: Colors.transparent,
-          title: const Text("Create Account",textAlign: TextAlign.center),
+          title: const Text("Create Account"),
         ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),

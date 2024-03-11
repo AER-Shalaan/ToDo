@@ -31,13 +31,16 @@ class _LoginScreenState extends State<LoginScreen> {
       decoration: const BoxDecoration(
           image:DecorationImage(
               fit: BoxFit.fill,
-              image: AssetImage("assets/images/bg.jpg"))),
+              image: AssetImage("assets/images/bg.jpg")
+          )
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         //resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          centerTitle: true,
           backgroundColor: Colors.transparent,
-          title: const Text("Login",textAlign: TextAlign.center),
+          title: const Text("Login"),
         ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
