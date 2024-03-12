@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.transparent,
         //resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          centerTitle: true,
+          centerTitle: true,elevation: 0,
           backgroundColor: Colors.transparent,
           title: const Text("Login"),
         ),

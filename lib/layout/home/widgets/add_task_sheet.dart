@@ -65,20 +65,14 @@ class _AddTaskSheerState extends State<AddTaskSheer> {
                     },
                   ),
                   SizedBox(height: 15),
-                  TextButton(onPressed: ()async{
-                    homeProvider.selectedDate = (await showDatePicker(
-                      context: context,
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2040),
-                      initialDate: DateTime.now()
-                    ))!;
-                     setState(() {
-                     });
-                    }, child: Text("Select Date",style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w400, fontSize: 20))),
                   Text("${homeProvider.selectedDate.day}/${homeProvider.selectedDate.month}/${homeProvider.selectedDate.year}"),
                   TextButton(onPressed: (){
-                    showTimePicker(context: context, initialTime: TimeOfDay.now());
+                    showTimePicker(context: context, initialTime:homeProvider.selectedTime,onEntryModeChanged: homeProvider.changeTime,);
+                    setState(() {
+
+                    });
                     }, child: Text("Select Time",style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w400, fontSize: 20),textAlign: TextAlign.center)),
+                  Text("${homeProvider.selectedTime.hour}:${homeProvider.selectedTime.minute}")
                 ],
               ),
             ],

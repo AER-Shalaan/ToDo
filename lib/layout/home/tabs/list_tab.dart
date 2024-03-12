@@ -34,7 +34,7 @@ class ListTab extends StatelessWidget {
             ),
             EasyInfiniteDateTimeLine(
                 dayProps: EasyDayProps(
-                  dayStructure: DayStructure.dayStrDayNum,
+                  dayStructure: DayStructure.monthDayNumDayStr,
                   height: height/9,
 
                   todayStyle: DayStyle(
@@ -55,6 +55,12 @@ class ListTab extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         height: 2.5
                     ),
+                    monthStrStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        height: 2.5
+                    )
                   ),
                   activeDayStyle: DayStyle(
                       dayStrStyle:const TextStyle(
@@ -68,6 +74,11 @@ class ListTab extends StatelessWidget {
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           height: 2.5
+                      ),
+                      monthStrStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold, height: 1.5
                       ),
                       decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.primary,
@@ -91,6 +102,12 @@ class ListTab extends StatelessWidget {
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         height: 2.5
+                    ),
+                    monthStrStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        height: 1.5
                     ),
                   ),
 
