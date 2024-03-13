@@ -7,7 +7,8 @@ class CustomFormField extends StatelessWidget {
   Widget? suffixIcon;
   FieldValidation validator;
   TextEditingController? controller;
-  CustomFormField({super.key,required this.label,this.keyboard,this.obscure = false,this.suffixIcon , this.validator,required this.controller});
+  int? maxLines;
+  CustomFormField({super.key,required this.label,this.keyboard,this.obscure = false,this.suffixIcon , this.validator,required this.controller,this.maxLines=1});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class CustomFormField extends StatelessWidget {
       controller: controller,
       obscureText: obscure,
       keyboardType: keyboard,
+      maxLines: maxLines,
       decoration: InputDecoration(label: Text(label), suffixIcon: suffixIcon),
       style: const TextStyle(color: Colors.black, fontSize: 16),
     );

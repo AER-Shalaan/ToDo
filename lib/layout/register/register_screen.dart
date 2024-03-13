@@ -1,14 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do/layout/login/login_screen.dart';
 import 'package:to_do/shared/constants.dart';
 import 'package:to_do/shared/firebaseautherrorcodes.dart';
 import 'package:to_do/shared/remote/firebase/firestore_helper.dart';
 import 'package:to_do/shared/reusable_componenets/dialog_utils.dart';
-
 import '../../shared/reusable_componenets/custom_form_field.dart';
-import '../home/home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String routeName = "/Register";
@@ -38,8 +34,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Colors.transparent,
         //resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
           backgroundColor: Colors.transparent,
-          title: const Text("Create Account",textAlign: TextAlign.center),
+          title: const Text("Create Account"),
         ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
