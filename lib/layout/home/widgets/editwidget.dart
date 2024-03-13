@@ -10,7 +10,8 @@ import '../provider/home_provider.dart';
 
 class EditWidget extends StatefulWidget {
   static const String routeName ="/EditWidget";
-  const EditWidget({super.key});
+  TextEditingController titleTextEditingController = TextEditingController();
+  TextEditingController descriptionTextEditingController = TextEditingController();
 
   @override
   State<EditWidget> createState() => _EditWidgetState();
@@ -20,8 +21,6 @@ class _EditWidgetState extends State<EditWidget> {
   @override
   Widget build(BuildContext context) {
     Task args = ModalRoute.of(context)?.settings.arguments as Task;
-    TextEditingController titleTextEditingController = TextEditingController();
-    TextEditingController descriptionTextEditingController = TextEditingController();
     MyAuthProvider myAuthProvider = Provider.of<MyAuthProvider>(context);
     HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     GlobalKey<FormState> editForm = GlobalKey();
@@ -60,7 +59,7 @@ class _EditWidgetState extends State<EditWidget> {
                           SizedBox(height: 30),
                           CustomFormField(
                             label: "This is Title",
-                            controller: titleTextEditingController,
+                            controller: widget.titleTextEditingController,
                             keyboard: TextInputType.text,
                             validator: (value) {
                               if(value == null || value.isEmpty){
@@ -71,7 +70,7 @@ class _EditWidgetState extends State<EditWidget> {
                           ),
                           CustomFormField(
                             label: "Task details",
-                            controller: descriptionTextEditingController,
+                            controller: widget.descriptionTextEditingController,
                             keyboard: TextInputType.multiline,
                             maxLines: 3,
                             validator: (value) {
@@ -145,8 +144,8 @@ class _EditWidgetState extends State<EditWidget> {
                                   await FireStoreHelper.editTask(
                                       userId: myAuthProvider.firebaseUserAuth!.uid,
                                       taskId: args.id??"" ,
-                                      title: titleTextEditingController.text,
-                                      description: descriptionTextEditingController.text,
+                                      title: widget.titleTextEditingController.text,
+                                      description: widget.descriptionTextEditingController.text,
                                       date: homeProvider.selectedDate.millisecondsSinceEpoch,
                                       time: DateTime(
                                           homeProvider.selectedDate.year,
