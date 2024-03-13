@@ -5,6 +5,15 @@ class SettingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.blueAccent,);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Settings"),
+        toolbarHeight: 157,
+      ),
+      body: Column(
+        children: [],
+      )
+    );
   }
 }

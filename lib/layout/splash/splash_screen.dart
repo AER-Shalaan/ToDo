@@ -64,7 +64,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
     MyAuthProvider provider = Provider.of<MyAuthProvider>(context, listen: false);
     if(provider.isFirebaseUserLoggedIn()){
       await provider.retrieveDatabaseUserDara();
-      Navigator.pushReplacementNamed(context, HomeScreen.roteName);
+      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
     }else{
       Navigator.pushReplacementNamed(context, LoginScreen.routeName);
     }

@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
         MyUser.User? user = await FireStoreHelper.getUser(credential.user!.uid);
         provider.setUsers(credential.user, user);
         DialogUtils.hideLoading(context);
-        Navigator.pushNamedAndRemoveUntil(context, HomeScreen.roteName, (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
       }
       on FirebaseAuthException catch (e) {
         DialogUtils.hideLoading(context);

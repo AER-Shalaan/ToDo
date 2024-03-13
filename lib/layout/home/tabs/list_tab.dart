@@ -2,7 +2,10 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do/layout/home/provider/home_provider.dart';
+import 'package:to_do/layout/home/widgets/taskwidget.dart';
+import 'package:to_do/model/task.dart';
 import 'package:to_do/shared/Providers/auth_provider.dart';
+import 'package:to_do/shared/remote/firebase/firestore_helper.dart';
 import '../../login/login_screen.dart';
 
 class ListTab extends StatelessWidget {
@@ -53,13 +56,13 @@ class ListTab extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        height: 2.5
+                        height: 1.5
                     ),
                     monthStrStyle: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        height: 2.5
+                        height: 1.5
                     )
                   ),
                   activeDayStyle: DayStyle(
@@ -73,7 +76,7 @@ class ListTab extends StatelessWidget {
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          height: 2.5
+                          height: 1.5
                       ),
                       monthStrStyle: TextStyle(
                           color: Colors.white,
@@ -101,7 +104,7 @@ class ListTab extends StatelessWidget {
                         color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        height: 2.5
+                        height: 1.5
                     ),
                     monthStrStyle: TextStyle(
                         color: Colors.black,
@@ -112,6 +115,7 @@ class ListTab extends StatelessWidget {
                   ),
 
                 ),
+
                 firstDate: DateTime.now(),
                 focusDate: homeProvider.selectedDate,
                 lastDate: DateTime.now().add(const Duration(days: 365)),
@@ -123,6 +127,40 @@ class ListTab extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(height: height*0.01),
+        Expanded(
+          child: StreamBuilder(
+              stream: FireStoreHelper.ListenToTasks(myAuthProvider.firebaseUserAuth!.uid,DateTime(
+                  homeProvider.selectedDate.year,
+                  homeProvider.selectedDate.month,
+                  homeProvider.selectedDate.day).millisecondsSinceEpoch),
+              builder: (context,snapshot){
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return Center(child: CircularProgressIndicator());
+                }
+                if(snapshot.hasError){
+                  return Column(
+                    children: [
+                      Text("Something went wrong ${snapshot.hasError}"),
+                      ElevatedButton(onPressed: (){
+                        myAuthProvider.signOut();
+                        Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+                        }, child: Text("LogOut and try again ..."))
+                    ],
+                  );
+                }
+                List<Task> tasks = snapshot.data??[];
+                return ListView.separated(
+                    itemBuilder: (context,index)=> TaskWidget(
+                      task:tasks[index],
+                    ),
+                    separatorBuilder: (context,index)=> SizedBox(height: height*0.04),
+                    itemCount: tasks.length
+                );
+              }),
+        ),
+        SizedBox(height: height*0.031,)
+
 
       ],
     );

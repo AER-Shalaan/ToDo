@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +5,7 @@ import 'package:to_do/layout/home/home_screen.dart';
 import 'package:to_do/layout/home/provider/home_provider.dart';
 import 'package:to_do/layout/register/register_screen.dart';
 import 'package:to_do/shared/Providers/auth_provider.dart';
+import 'package:to_do/layout/home/widgets/editwidget.dart';
 import 'package:to_do/style/theme/dark.dart';
 import 'package:to_do/style/theme/light.dart';
 import 'firebase_options.dart';
@@ -17,9 +17,10 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ChangeNotifierProvider(
-    create:(context) => MyAuthProvider(),
-    child: const MyApp()));
+  runApp(MultiProvider(providers: [
+      ChangeNotifierProvider<MyAuthProvider>(create:(context) => MyAuthProvider()),
+      ChangeNotifierProvider<HomeProvider>(create:(context) => HomeProvider()),
+    ],child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -36,10 +37,9 @@ class MyApp extends StatelessWidget {
       routes: {
         Splash.routeName:(_)=>Splash(),
         LoginScreen.routeName:(_)=>LoginScreen(),
+        EditWidget.routeName:(_)=>EditWidget(),
         RegisterScreen.routeName:(_)=>RegisterScreen(),
-        HomeScreen.roteName:(_)=>ChangeNotifierProvider(
-          create: (_)=>HomeProvider(),
-            child: HomeScreen())
+        HomeScreen.routeName:(_)=>HomeScreen()
       },
     );
   }

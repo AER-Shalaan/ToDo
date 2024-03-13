@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do/layout/home/provider/home_provider.dart';
 import 'package:to_do/shared/reusable_componenets/custom_form_field.dart';
-class AddTaskSheer extends StatefulWidget {
+
+class AddTaskSheet extends StatefulWidget {
+  void Function() onCancel;
+  TextEditingController titleController;
+  TextEditingController descriptionController;
+  GlobalKey<FormState> formKey;
+  AddTaskSheet({super.key, required this.onCancel,required this.titleController,required this.descriptionController , required this.formKey});
   @override
-  State<AddTaskSheer> createState() => _AddTaskSheerState();
+  State<AddTaskSheet> createState() => _AddTaskSheetState();
 }
 
-class _AddTaskSheerState extends State<AddTaskSheer> {
-  TextEditingController taskTitleController = TextEditingController();
+class _AddTaskSheetState extends State<AddTaskSheet> {
 
-  TextEditingController taskDescriptionController = TextEditingController();
-
-  GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     HomeProvider homeProvider = Provider.of<HomeProvider>(context);
+
     return Container(
       height: height*0.54,
       decoration: BoxDecoration(
@@ -27,22 +32,28 @@ class _AddTaskSheerState extends State<AddTaskSheer> {
       child: Padding(
         padding: const EdgeInsets.only(right: 20,left: 20),
         child: Form(
-          key: formKey,
+          key: widget.formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              SizedBox(height: height*0.01),
               Row(
                 children: [
+                  SizedBox(width: width*0.05),
                   Expanded(child: Text("Add New Task",style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),textAlign: TextAlign.center)),
-                  IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.close)),
+                  IconButton(onPressed: (){
+                    Navigator.pop(context);
+                    widget.onCancel();
+                    }, icon: Icon(Icons.close)),
                 ],
               ),
               Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 15,),
+                  SizedBox(height: 15),
                   CustomFormField(
                     label: "enter your task",
-                    controller: taskTitleController,
+                    controller: widget.titleController,
                     keyboard: TextInputType.text,
                     validator: (value) {
                       if(value == null || value.isEmpty){
@@ -54,7 +65,7 @@ class _AddTaskSheerState extends State<AddTaskSheer> {
                   SizedBox(height: 5),
                   CustomFormField(
                     label: "enter your task description",
-                    controller: taskDescriptionController,
+                    controller: widget.descriptionController,
                     maxLines: 3,
                     keyboard: TextInputType.multiline,
                     validator: (value) {
@@ -64,15 +75,42 @@ class _AddTaskSheerState extends State<AddTaskSheer> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 15),
-                  Text("${homeProvider.selectedDate.day}/${homeProvider.selectedDate.month}/${homeProvider.selectedDate.year}"),
-                  TextButton(onPressed: (){
-                    showTimePicker(context: context, initialTime:homeProvider.selectedTime,onEntryModeChanged: homeProvider.changeTime,);
-                    setState(() {
-
-                    });
-                    }, child: Text("Select Time",style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w400, fontSize: 20),textAlign: TextAlign.center)),
-                  Text("${homeProvider.selectedTime.hour}:${homeProvider.selectedTime.minute}")
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment:MainAxisAlignment.spaceAround,
+                    children: [
+                      Text("Selected date:",style: TextStyle(fontSize: 18),),
+                      Text(DateFormat.yMMMMEEEEd().format(homeProvider.selectedDate),
+                      style: TextStyle(fontSize: 16.0,color: Colors.black45),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15,),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                            onPressed:()async{
+                              TimeOfDay? selectedTime = await showTimePicker(
+                                context: context,
+                                initialTime:TimeOfDay.now(),
+                              );
+                              homeProvider.changeTime(selectedTime);
+                              }, child:
+                          Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Select Time",style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 18)),
+                                SizedBox(width: 10),
+                                Icon(Icons.access_time_outlined,color: Colors.white,size: 16)
+                              ]
+                          )
+                        ),
+                    SizedBox(width: width*0.16),
+                    Text(DateFormat.jm().format(DateTime(homeProvider.selectedDate.year,homeProvider.selectedDate.month,homeProvider.selectedDate.day,homeProvider.selectedTime!.hour,homeProvider.selectedTime!.minute)),
+                        style: TextStyle(fontSize: 16.0,color: Colors.black45))
+                      ]
+                  ),
                 ],
               ),
             ],

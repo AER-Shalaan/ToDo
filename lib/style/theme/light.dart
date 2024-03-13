@@ -14,6 +14,14 @@ class LightTheme{
           centerTitle: false,
           titleTextStyle: TextStyle(fontSize: 28, color: Colors.white),
         ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(AppColors.primaryLightColor),
+          )
+        ),
+        textTheme: TextTheme(
+          labelMedium: TextStyle(color: AppColors.primaryLightColor ,fontWeight: FontWeight.w700 , fontSize: 18)
+        ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           selectedItemColor: AppColors.primaryLightColor,
           unselectedItemColor: AppColors.unselectedIconColor,
