@@ -82,34 +82,29 @@ class _EditWidgetState extends State<EditWidget> {
                             },
                           ),
                           SizedBox(height: 20),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton(
-                                    onPressed:()async{
-                                      DateTime? selectedDate = await showDatePicker(
-                                        context: context,
-                                        firstDate: DateTime.now(),
-                                        lastDate: DateTime.now().add(const Duration(days: 365)),
-                                        initialDate: homeProvider.selectedDate,
+                          ElevatedButton(
+                              onPressed:()async{
+                                DateTime? selectedDate = await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime.now().add(const Duration(days: 365)),
+                                  initialDate: homeProvider.selectedDate,
 
-                                      );
-                                      homeProvider.changeDate(selectedDate??DateTime.now());
-                                    }, child:
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text("Select Date",style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 18)),
-                                      SizedBox(width: 10),
-                                      Icon(Icons.calendar_month_outlined,color: Colors.white,size: 16)
-                                    ]
-                                )
-                                ),
+                                );
+                                homeProvider.changeDate(selectedDate??DateTime.now());
+                              }, child:
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Select Date",style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 18)),
                                 SizedBox(width: 10),
-                                Text(DateFormat('dd/MM/yyyy').format(DateTime(homeProvider.selectedDate.year,homeProvider.selectedDate.month,homeProvider.selectedDate.day,homeProvider.selectedTime!.hour,homeProvider.selectedTime!.minute)),
-                                    style: TextStyle(fontSize: 16.0,color: Colors.black45))
+                                Icon(Icons.calendar_month_outlined,color: Colors.white,size: 16)
                               ]
+                          )
                           ),
+                          SizedBox(height: 10),
+                          Text(DateFormat('dd/MM/yyyy').format(DateTime(homeProvider.selectedDate.year,homeProvider.selectedDate.month,homeProvider.selectedDate.day,homeProvider.selectedTime!.hour,homeProvider.selectedTime!.minute)),
+                              style: TextStyle(fontSize: 16.0,color: Colors.black45)),
                           SizedBox(height: 20),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,

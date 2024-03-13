@@ -27,7 +27,7 @@ class TaskWidget extends StatelessWidget {
 
         startActionPane:ActionPane(
             motion:ScrollMotion(),
-            extentRatio: 0.2,
+            extentRatio: 0.4,
             children: [
               SlidableAction(
                 onPressed: (context){
@@ -41,7 +41,7 @@ class TaskWidget extends StatelessWidget {
             ]),
         endActionPane: ActionPane(
             motion: ScrollMotion(),
-            extentRatio: 0.2,
+            extentRatio: 0.4,
             children: [
               SlidableAction(onPressed: (context){
                 homeProvider.selectedTime = TimeOfDay(hour: taskDate.hour, minute: taskDate.minute);
@@ -79,7 +79,7 @@ class TaskWidget extends StatelessWidget {
                       children: [
                         const SizedBox(width: 15),
                         Container(
-                          width: width*0.55,
+                          width: width*0.45,
                           height: height*0.035,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
