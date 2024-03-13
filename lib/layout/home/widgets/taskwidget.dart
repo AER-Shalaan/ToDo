@@ -79,7 +79,7 @@ class TaskWidget extends StatelessWidget {
                       children: [
                         const SizedBox(width: 15),
                         Container(
-                          width: width*0.55,
+                          width: width*0.45,
                           height: height*0.035,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
